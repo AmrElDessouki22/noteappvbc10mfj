@@ -1,13 +1,19 @@
 'use client';
 
 import { createContext, useContext, useState } from 'react';
+import { Note } from '../types';
 
-const NotesContext = createContext();
+interface NotesContextType {
+  notes: Note[];
+  addNote: (newNote: Note) => void;
+}
+
+const NotesContext = createContext<NotesContextType | undefined>(undefined);
 
 export function NotesProvider({ children }) {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<Note[]>([]);
 
-  const addNote = (newNote) => {
+  const addNote = (newNote: Note) => {
     setNotes((prevNotes) => [...prevNotes, newNote]);
   };
 
@@ -18,4 +24,10 @@ export function NotesProvider({ children }) {
   );
 }
 
-export const useNotes = () => useContext(NotesContext);
+export const useNotes = () => {
+  const context = useContext(NotesContext);
+  if (!context) {
+    throw new Error('useNotes must be used within a NotesProvider');
+  }
+  return context;
+};
