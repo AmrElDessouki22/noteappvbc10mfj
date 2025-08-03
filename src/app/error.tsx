@@ -1,12 +1,11 @@
 'use client';
 
-import { ReactNode } from 'react';
-
-export default function ErrorBoundary({ children }: { children: ReactNode }) {
+export default function ErrorBoundary({ error, reset }) {
   return (
-    <div>
-      <h1>Something went wrong.</h1>
-      <div>{children}</div>
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre>{error.message}</pre>
+      <button onClick={reset}>Try again</button>
     </div>
   );
 }
